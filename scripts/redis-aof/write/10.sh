@@ -1,0 +1,1 @@
+siege -d1  -c10  -v -t15s --content-type="application/json" 'http://127.0.0.1:8080/aof-redis POST'

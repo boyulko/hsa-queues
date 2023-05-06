@@ -1,0 +1,45 @@
+version: '3.3'
+services:
+  redis-rdb:
+    container_name: "redis-rdb"
+    image: redis:6.0-alpine
+    platform: linux/amd64
+    build:
+      context: ./redis/rdb
+    command: redis-server --maxmemory 3mb --maxmemory-policy noeviction
+    ports:
+      - "6381:6379"
+    volumes:
+      - cache:/data
+
+  redis-aof:
+    container_name: "redis-aof"
+    image: redis:6.0-alpine
+    platform: linux/amd64
+    build:
+      context: ./redis/aof
+    command: redis-server --maxmemory 3mb --maxmemory-policy noeviction
+    ports:
+      - "6380:6379"
+    volumes:
+      - cache:/data
+
+  beanstalkd:
+    container_name: "beanstalkd"
+    image: schickling/beanstalkd
+    platform: linux/amd64
+    ports:
+      - "11300:11300"
+
+
+#  queues-comparison:
+#    container_name: "queues-comparison"
+#    image: queues-comparison
+#    ports:
+#      - "8080:8080"
+
+
+
+volumes:
+  cache:
+    driver: local
